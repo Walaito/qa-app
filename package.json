@@ -1,0 +1,27 @@
+{
+  "name": "qa-app",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd qa-client && npm run build",
+    "install-client": "cd qa-client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "start": "cd qa-server && node app.js",
+    "client": "cd qa-client && npm start",
+    "dev": "concurrently -n 'server,client' -c 'red,green'  \"nodemon app.js\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Walaito/qa-app.git"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Walaito/qa-app/issues"
+  },
+  "homepage": "https://github.com/Walaito/qa-app#readme"
+}

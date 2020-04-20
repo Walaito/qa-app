@@ -3,6 +3,7 @@ import Questions from "./Questions";
 import Question from "./Question";
 import Nav from "./Nav";
 import { Router } from "@reach/router";
+import './App.css';
 
 class App extends Component {
   constructor(props) {

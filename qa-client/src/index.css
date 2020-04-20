@@ -1,0 +1,68 @@
+body {
+  margin: 2rem;
+  font-family: 'Lato',-apple-system, BlinkMacSystemFont, "Oswald", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+code {
+  font-family: 'Lato', source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.container {
+  display: grid;
+}
+
+.foodImage {
+  max-width: 30%;
+}
+
+li {
+  list-style-type: none;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.nav-link {
+  margin: 2rem;
+}
+
+button {
+  margin: 0.5rem;
+}
+
+.btn-submit {
+  background-color: #4CAF50;
+  border: 3px solid #4CAF50;
+  color: white;
+  text-transform: uppercase;
+  height: auto;
+  width: inherit;
+  text-shadow: 4px 4px 3px rgba(77, 77, 77, 0.5);
+  box-shadow: 5px 5px rgba(77, 77, 77, 0.1);
+  cursor: pointer;
+  transition: transform 0.4s, box-shadow 0.4s;
+  margin: 1rem;
+}
+
+.btn-submit:hover {
+  box-shadow: 6px 6px rgba(77, 77, 77, 0.5);
+}
+
+.btn-submit:active {
+  transform: translate3d(7px, 7px, 0px);
+  box-shadow: 7px 7px rgba(77, 77, 77, 0.5);
+}
+
+
+@media only screen and (max-width: 1203px) {
+  .foodImage {
+    max-width: 70%;
+  }
+}

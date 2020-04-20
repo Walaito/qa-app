@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "@reach/router";
 
 class PostAnswer extends Component {
   constructor(props) {
@@ -11,23 +10,25 @@ class PostAnswer extends Component {
 
   onChange(event) {
     this.setState({
-      "answertext": event.target.value
+      answertext: event.target.value
     });
   }
 
   onSubmit() {
-    this.props.postAnswer(this.props._id, this.state.answertext);
+    this.props.postAnswer(this.props.id, this.state.answertext);
   }
 
   render() {
     return (
       <>
-        <input
-          name="answertext"
-          onChange={event => this.onChange(event)}
-          type="text"
-        />
-        <button type="submit" onClick={_ => this.onSubmit()}>Post Answer</button>
+        <form>
+          <input
+            name="answertext"
+            onChange={event => this.onChange(event)}
+            type="text" size="30"
+          />
+          <button type="submit" onClick={_ => this.onSubmit()} className="btn-submit">Post Answer</button>
+        </form>
       </>
     );
   }

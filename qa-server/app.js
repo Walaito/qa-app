@@ -6,7 +6,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 /**** Configuration ****/
-const appName = "You Ask"; // Change the name of your server app!
+const appName = "You Ask Q&A"; // Change the name of your server app!
 const port = process.env.PORT || 8080; // Pick port 8080 if the PORT env variable is empty.
 const app = express(); // Get the express app object.
 
@@ -16,9 +16,14 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
-app.use(express.json()); // Add middleware that parses JSON from the request body.
-app.use(morgan("combined")); // Add middleware that logs all http requests to the console.
 app.use(cors()); // Avoid CORS errors. https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+app.use(bodyParser.json()); // Parse JSON from the request body
+app.use(morgan("combined")); // Add middleware that logs all http requests to the console.
+
+// Needed for serving production build of React
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static("../qa-client/build"));
+}
 
 /**** Database ****/
 const questionDB = require("./question_db")(mongoose);
@@ -48,14 +53,13 @@ app.post("/api/questions", async (req, res) => {
 });
 
 // PostAnswer
-app.post("/api/questions/:id/answers", (req, res) => {
+app.post("/api/questions/:id/answers", async (req, res) => {
   const id = parseInt(req.params.id);
-  const answertext = req.body.answertext;
-  //const question = questions.find((q) => q.id === id);
-  //question.answers.push(answertext);
-  //console.log(question);
-
-  res.json({ msg: "Answer added", question: question });
+  const answertext = {
+    answertext: req.body.answertext
+  };
+  const postAnswer = await questionDB.addAnswer(id, answertext);
+  res.json(postAnswer);
 });
 
 /**** Start! ****/

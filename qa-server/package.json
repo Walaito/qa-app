@@ -1,5 +1,5 @@
 {
-  "name": "express_api_template",
+  "name": "qa-server",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {

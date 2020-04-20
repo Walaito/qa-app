@@ -5,7 +5,7 @@ class Nav extends Component {
   render() {
     return (
       <>
-        <h2>
+        <h2 className="nav-link">
           <Link to="/">Q&A</Link>
         </h2>
       </>

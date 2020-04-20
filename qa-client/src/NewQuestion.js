@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "@reach/router";
 
 class NewQuestion extends Component {
   constructor(props) {
@@ -29,9 +28,9 @@ class NewQuestion extends Component {
         <input
           name="question"
           onChange={(event) => this.onChange(event)}
-          type="text"
+          type="text" size="40"
         />
-        <button type="submit" onClick={_ => this.onSubmit()}>Creat Question</button>
+        <button type="submit" onClick={_ => this.onSubmit()} className="btn-submit">Creat Question</button>
       </>
     );
   }
