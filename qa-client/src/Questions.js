@@ -6,7 +6,7 @@ class Questions extends Component {
   render() {
     const list = this.props.data.map((q) => (
       <li>
-        <Link to={"/question/" + q.id}>{q.question}</Link>
+        <Link to={"/question/" + q._id}>{q.question}</Link>
       </li>
     ));
 
@@ -15,7 +15,7 @@ class Questions extends Component {
         <ul>{list}</ul>
         <NewQuestion
           path="/question"
-          submit={(question) => this.submit(question)}
+          postQuestion={(question) => this.props.postQuestion(question)}
         ></NewQuestion>
       </>
     );

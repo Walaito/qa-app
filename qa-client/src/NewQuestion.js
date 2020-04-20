@@ -5,8 +5,8 @@ class NewQuestion extends Component {
   constructor(props) {
     super(props);
 
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    //this.onChange = this.onChange.bind(this);
+    // this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       question: ''
@@ -15,23 +15,23 @@ class NewQuestion extends Component {
 
   onChange(event) {
     this.setState({
-      [event.target.name]: event.target.value,
+      "question": event.target.value,
     });
   }
 
   onSubmit() {
-    this.props.submit(this.state.question);
+    this.props.postQuestion(this.state.question);
   }
 
   render() {
     return (
       <>
         <input
-          name="input"
+          name="question"
           onChange={(event) => this.onChange(event)}
           type="text"
         />
-        <button onClick={(_) => this.onSubmit()}>Creat Question</button>
+        <button type="submit" onClick={_ => this.onSubmit()}>Creat Question</button>
       </>
     );
   }

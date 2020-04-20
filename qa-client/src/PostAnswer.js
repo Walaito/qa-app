@@ -11,23 +11,23 @@ class PostAnswer extends Component {
 
   onChange(event) {
     this.setState({
-      [event.target.name]: event.target.value
+      "answertext": event.target.value
     });
   }
 
   onSubmit() {
-    this.props.postAnswer(this.props.id, this.state.answertext);
+    this.props.postAnswer(this.props._id, this.state.answertext);
   }
 
   render() {
     return (
       <>
         <input
-          name="input"
+          name="answertext"
           onChange={event => this.onChange(event)}
           type="text"
         />
-        <button onClick={_ => this.onSubmit()}>Post Answer</button>
+        <button type="submit" onClick={_ => this.onSubmit()}>Post Answer</button>
       </>
     );
   }

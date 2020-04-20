@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Questions from "./Questions";
 import Question from "./Question";
-import NewQuestion from "./NewQuestion";
 import Nav from "./Nav";
 import { Router } from "@reach/router";
 
@@ -15,7 +14,7 @@ class App extends Component {
 
   submit(question) {
     const newQuestion = {
-      question: question,
+      question: question
     };
     this.setState({
       questions: [...this.state.questions, newQuestion],
@@ -27,22 +26,44 @@ class App extends Component {
   }
 
   async getData() {
-    const url = "http://localhost:5000/questions"; //todo haraku
+    const url = "http://localhost:8080/api/questions"; //todo heroku
     const response = await fetch(url);
     const data = await response.json();
+    console.log(data);
     this.setState({
       questions: data,
     });
   }
 
   getQuestion(id) {
-    const question = this.state.questions.find((q) => q.id === parseInt(id));
+    const question = this.state.questions.find((q) => q._id === id);
     return question;
   }
 
+  async postQuestion(question) {
+    console.log("postQuestion", question);
+    const url = `http://localhost:8080/api/questions/`;
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        question: question
+      }),
+    });
+    const data = await response.json();
+    console.log("Printing the response:", data);
+
+    await this.getData();
+  }
+
+
+
   async postAnswer(id, answertext) {
     console.log("postAnswer", id, answertext);
-    const url = `http://localhost:5000/questions/${id}/answers`;
+    const url = `http://localhost:8080/api/questions/${id}/answers`;
 
     const response = await fetch(url, {
       headers: {
@@ -64,12 +85,10 @@ class App extends Component {
       <>
         <Nav>{""}</Nav>
         <Router>
-          <Questions path="/" data={this.state.questions}></Questions>
-          <Question
-            path="/question/:id"
-            getQuestion={(id) => this.getQuestion(id)}
-            postAnswer={(id, text) => this.postAnswer(id, text)}
-          ></Question>
+          <Questions path="/" submit={question => this.submit(question)} data={this.state.questions}
+            postQuestion={(question) => this.postQuestion((question))} />
+          <Question path="/question/:id" getQuestion={(id) => this.getQuestion(id)}
+            postAnswer={(id, answertext) => this.postAnswer(id, answertext)} />
         </Router>
       </>
     );
