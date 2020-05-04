@@ -19,11 +19,7 @@ connection.once('open', () => {
 app.use(cors()); // Avoid CORS errors. https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
 app.use(bodyParser.json()); // Parse JSON from the request body
 app.use(morgan("combined")); // Add middleware that logs all http requests to the console.
-
-// Needed for serving production build of React
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static("../qa-client/build"));
-}
+app.use(express.static("../qa-client/build"));
 
 /**** Database ****/
 const questionDB = require("./question_db")(mongoose);

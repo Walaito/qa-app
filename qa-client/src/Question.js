@@ -25,7 +25,7 @@ class Question extends Component {
         if (question) {
             content = question.question;
             answers = question.answers.map(a =>
-                <li>
+                <li key={a}>
                     <button onClick={this.voteThis}>+</button>
                     <button onClick={this.unvoteThis}>-</button>
                     {a} Votes: {this.state.value}

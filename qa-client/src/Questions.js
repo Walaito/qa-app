@@ -5,7 +5,7 @@ import NewQuestion from "./NewQuestion";
 class Questions extends Component {
   render() {
     const list = this.props.data.map((q) => (
-      <li>
+      <li key={q._id}>
         <Link to={"/question/" + q._id}>{q.question}</Link>
       </li>
     ));
