@@ -6,6 +6,10 @@ import { Router } from "@reach/router";
 import './App.css';
 
 class App extends Component {
+  // API url from the file '.env' OR the file '.env.development'.
+  // The first file is only used in production.
+  API_URL = process.env.REACT_APP_API_URL;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +31,7 @@ class App extends Component {
   }
 
   async getData() {
-    const url = "http://localhost:8080/api/questions"; //todo heroku
+    const url = `${this.API_URL}/questions`; //todo heroku
     const response = await fetch(url);
     const data = await response.json();
     console.log(data);
@@ -43,7 +47,7 @@ class App extends Component {
 
   async postQuestion(question) {
     console.log("postQuestion", question);
-    const url = `http://localhost:8080/api/questions/`;
+    const url = `${this.API_URL}/questions/`;
 
     const response = await fetch(url, {
       headers: {
@@ -64,7 +68,7 @@ class App extends Component {
 
   async postAnswer(id, answertext) {
     console.log("postAnswer", id, answertext);
-    const url = `http://localhost:8080/api/questions/${id}/answers`;
+    const url = `${this.API_URL}/questions/${id}/answers`;
 
     const response = await fetch(url, {
       headers: {

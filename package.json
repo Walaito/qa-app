@@ -1,7 +1,7 @@
 {
   "name": "qa-app",
   "version": "1.0.0",
-  "description": "",
+  "private": true,
   "scripts": {
     "start": "cd qa-server && node app.js",
     "dev": "cd qa-client && npm start",

@@ -4,9 +4,10 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require('path');
 
 /**** Configuration ****/
-const appName = "You Ask Q&A"; // Change the name of your server app!
+const appName = "youask"; // Change the name of your server app!
 const port = process.env.PORT || 8080; // Pick port 8080 if the PORT env variable is empty.
 const app = express(); // Get the express app object.
 
@@ -57,6 +58,10 @@ app.post("/api/questions/:id/answers", async (req, res) => {
   const postAnswer = await questionDB.addAnswer(id, answertext);
   res.json(postAnswer);
 });
+
+app.get('*', (req, res) =>
+  res.sendFile(path.resolve('..', 'client', 'build', 'index.html'))
+);
 
 /**** Start! ****/
 const url = process.env.ATLAS_URI || "mongodb://localhost/question_db";
