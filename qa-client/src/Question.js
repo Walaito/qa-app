@@ -23,13 +23,14 @@ class Question extends Component {
         let content = "Loading";
         let answers = [];
         if (question) {
-            content = question.question;
-            answers = question.answers.map(a =>
-                <li key={a}>
-                    <button onClick={this.voteThis}>+</button>
-                    <button onClick={this.unvoteThis}>-</button>
-                    {a} Votes: {this.state.value}
-                </li>);
+            content = question.ques;
+            answers = question.answ.map(a =>
+                <tr key={a.text}>
+                    <td>{a.text}</td>
+                    <td className="btn-padding"><button onClick={this.voteThis}>+</button>
+                        <button onClick={this.unvoteThis}>-</button>
+                       Votes: {this.state.value}</td>
+                </tr>);
         }
 
         return (
@@ -37,13 +38,15 @@ class Question extends Component {
                 <h2>Question</h2>
                 <p>{content}</p>
                 <h3>Answers</h3>
-                <ul>
-                    {answers}
-                </ul>
+                <table>
+                    <tbody>
+                        {answers}
+                    </tbody>
+                </table>
 
 
                 {/* PostAnswer */}
-                <PostAnswer id={id} postAnswer={(id, answertext) => this.props.postAnswer(id, answertext)} />
+                <PostAnswer id={id} postAnswer={(id, text) => this.props.postAnswer(id, text)} />
             </>
         );
     }

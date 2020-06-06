@@ -1,75 +1,81 @@
 /**** External libraries ****/
-const express = require("express"); // The express.js library for implementing the API
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
-const cors = require("cors");
-const mongoose = require("mongoose");
+const express = require('express');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const cors = require('cors');
+const mongoose = require('mongoose');
 const path = require('path');
 
 /**** Configuration ****/
-const appName = "youask"; // Change the name of your server app!
-const port = process.env.PORT || 8080; // Pick port 8080 if the PORT env variable is empty.
-const app = express(); // Get the express app object.
+const port = process.env.PORT || 8080;
+const app = express();
 
-//check if the connection is successfully connected
-const connection = mongoose.connection;
-connection.once('open', () => {
-  console.log("MongoDB database connection established successfully");
-})
+app.use(express.static('../client/build'));
+app.use(bodyParser.json());
+app.use(morgan('combined'));
+app.use(cors());
 
-app.use(cors()); // Avoid CORS errors. https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
-app.use(bodyParser.json()); // Parse JSON from the request body
-app.use(morgan("combined")); // Add middleware that logs all http requests to the console.
-app.use(express.static("../qa-client/build"));
+const questionDB = require('./question_db')(mongoose);
 
-/**** Database ****/
-const questionDB = require("./question_db")(mongoose);
+    /**** API Routes ****/
 
-/**** Routes ****/
+    /** Get all questions **/
+    app.get('/api/questions', async (req, res) =>
+    {
+        const questions = await questionDB.getQuestions();
+        res.json(questions);
+    });
 
-// Return all questions in data
-app.get("/api/questions", async (req, res) => {
-  const questions = await questionDB.getQuestions();
-  res.json(questions);
-});
+    /** Get question by id **/
+    app.get('/api/questions/:id', async (req, res) => {
+        let id = req.params.id;
+        const question = await questionDB.getQuestion(id);
+        res.json(question);
+    });
 
-app.get("/api/questions/:id", async (req, res) => {
-  let id = req.params.id;
-  const question = await questionDB.getQuestion(id);
-  res.json(question);
-});
+    /** Post new question **/
+    app.post('/api/questions', async (req, res) => {
+        let Question = {
+            ques: req.body.ques,
+            answ: []
+        };
+      const newQuestion = await questionDB.createQuestion(Question)
+        res.json(newQuestion);
+    });
 
-//Post Question
-app.post("/api/questions", async (req, res) => {
-  let question = {
-    question: req.body.question,
-    answers: [] // Empty answers array
-  };
-  const newQuestion = await questionDB.createQuestion(question);
-  res.json(newQuestion);
-});
+    /** Post new answer **/
+    app.post('/api/questions/:id', async (req, res) => {
+        const id = req.params.id;
+        const answer =  {text: req.body.text , vote: req.body.vote};
+        const updateQuestion = await questionDB.addAnswer(id , answer);
+        res.json(updateQuestion);
+    });
 
-// PostAnswer
-app.post("/api/questions/:id/answers", async (req, res) => {
-  const id = parseInt(req.params.id);
-  const answertext = {
-    answertext: req.body.answertext
-  };
-  const postAnswer = await questionDB.addAnswer(id, answertext);
-  res.json(postAnswer);
-});
+    /** add vote - not working **/
+    app.put('api/question/:id' , async (req, res, next) => {
+        this.questionModel.answ.findByIdAndUpdate(req.params.id, {
+            $set: req.body.vote
+        }, (error, data) => {
+            if (error) {
+                return next(error);
+                console.log(error);
+            } else {
+                res.json(data)
+                console.log('Answer voted for successfully !')
+            }
+        })
+    });
 
-app.get('*', (req, res) =>
-  res.sendFile(path.resolve('..', 'client', 'build', 'index.html'))
-);
+    app.get('*', (req, res) =>
+        res.sendFile(path.resolve('..', 'client', 'build', 'index.html'))
+    );
 
-/**** Start! ****/
-const url = process.env.ATLAS_URI || "mongodb://localhost/question_db";
-mongoose
-  .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(async () => {
-    // await questionDB.bootstrap(); // Fill in test data if needed.
-    await app.listen(port); // Start the API
-    console.log(`QA API running on port ${port}!`);
-  })
-  .catch(error => console.error(error));
+    /**** Start! ****/
+    const url = process.env.MONGO_URL || 'mongodb://localhost/question_db';
+    mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+        .then(async () => {
+          //  await questionDB.bootstrap(); // Fill in test data if needed.
+            await app.listen(port); // Start the API
+            console.log(`Question API running on port ${port}!`);
+        })
+        .catch(error => console.error(error));

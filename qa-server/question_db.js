@@ -1,17 +1,16 @@
 class Db {
     /**
-     * Constructors an object for accessing questions in the database
+     * Constructors an object for accessing kittens in the database
      * @param mongoose the mongoose object used to create schema objects for the database
      */
     constructor(mongoose) {
-        // This is the schema we need to store questions in MongoDB
-        const questionSchema = new mongoose.Schema({
-            question: String,
-            answers: [String] // A list of answers as string
-        });
 
-        // This model is used in the methods of this class to access questions
+        const questionSchema = new mongoose.Schema({
+            ques: String,
+            answ: [{text:String , vote:Number}]
+        });
         this.questionModel = mongoose.model('question', questionSchema);
+
     }
 
     async getQuestions() {
@@ -38,13 +37,52 @@ class Db {
         return await question.save();
     }
 
-    async addAnswer(questionId, answer) {
+    async addAnswer(questionId, answer ) {
         // TODO: Error handling
         const question = await this.getQuestion(questionId);
-        question.answers.push(answer);
+
+
+        question.answ.push(answer);
         return await question.save();
     }
 
+    async addVote (voteId , vote) {
+        const answer = await this.getAnswer(voteId);
+        question.answ.vote.push(vote);
+        return await answer.save();
+    }
+
+    async getAnswer(id) {
+        try {
+            return await this.questionModel.answ.findById(id);
+        } catch (error) {
+            console.error("getVote:", error.message);
+            return {};
+        }
+    }
+
+
+    /**
+     Function to create question if needed
+     */
+    /*
+    async bootstrap(count = 10) {
+        const q1 = new this.questionModel({
+            ques: "bam",
+            answ: [{text:"ddddddd" , vote:2}]
+        });
+
+        // Let's save it.
+        try {
+            let savedQ1 = await q1.save();
+
+            console.log("Questions saved.", savedQ1);
+        } catch(error) { // Error handling in case it doesn't save
+            console.error(error);
+        }
+    }
+    */
 }
-// We export the object used to access the questiona in the database
+
+
 module.exports = mongoose => new Db(mongoose);

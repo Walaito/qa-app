@@ -4,18 +4,18 @@ class PostAnswer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      answertext: ""
+      text: ""
     };
   }
 
   onChange(event) {
     this.setState({
-      answertext: event.target.value
+      text: event.target.value
     });
   }
 
   onSubmit() {
-    this.props.postAnswer(this.props.id, this.state.answertext);
+    this.props.postAnswer(this.props.id, this.state.text);
   }
 
   render() {
@@ -23,7 +23,7 @@ class PostAnswer extends Component {
       <>
         <form>
           <input
-            name="answertext"
+            name="text"
             onChange={event => this.onChange(event)}
             type="text" size="30"
           />
