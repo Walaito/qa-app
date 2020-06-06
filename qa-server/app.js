@@ -70,7 +70,7 @@ app.get('*', (req, res) =>
 );
 
 /**** Start! ****/
-const url = process.env.MONGO_URL || 'mongodb://localhost/question_db';
+const url = process.env.ATLAS_URI || 'mongodb://localhost/question_db';
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(async () => {
         //  await questionDB.bootstrap(); // Fill in test data if needed.
